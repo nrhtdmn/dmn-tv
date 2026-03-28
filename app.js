@@ -1,7 +1,7 @@
 // --- UYGULAMA AYARLARI ---
 const AppConfig = {
     startHour: 19,
-    startMinute: 17,
+    startMinute: 24,
     endHour: 23,
     endMinute: 30,
     dataUrl: 'data.json'
@@ -11,21 +11,33 @@ const AppConfig = {
 const AppState = {
     scheduleData: [],
     currentVideoId: null,
-    intervalId: null
+    intervalId: null,
+    isStarted: false // Kullanıcının TV'yi açıp açmadığını takip eder
 };
+
+let hlsInstance = null; // M3U8 Player örneği için global değişken
 
 // --- BAŞLATMA ---
 document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(initApp, 500); // Kütüphanelerin yüklenmesi için ufak bir tolerans
+    fetchSchedule(); // Arka planda veriyi çekmeye başla
+    setupFullscreen();
+
+    // Televizyonu Aç butonunu dinle
+    const startBtn = document.getElementById('startTvBtn');
+    if (startBtn) {
+        startBtn.addEventListener('click', startTV);
+    }
 });
 
-async function initApp() {
-    await fetchSchedule();
-    setupFullscreen();
+function startTV() {
+    AppState.isStarted = true;
+    
+    // Opsiyonel: Tıklandığında direkt tam ekrana geçir (İstemezsen bu satırı silebilirsin)
+    // document.getElementById('playerContainer').requestFullscreen().catch(e => console.log(e));
     
     // Döngüyü başlat
     AppState.intervalId = setInterval(checkBroadcastLoop, 1000);
-    checkBroadcastLoop(); // İlk tetikleme
+    checkBroadcastLoop(); // Beklemeden ilk tetiklemeyi yap
 }
 
 // --- VERİ ÇEKME VE HESAPLAMA ---
@@ -39,8 +51,6 @@ async function fetchSchedule() {
         renderScheduleUI();
     } catch (error) {
         console.error("Yayın akışı yüklenemedi:", error);
-        document.getElementById('currentTitle').innerText = "Bağlantı Hatası!";
-        document.getElementById('currentDesc').innerText = "Yayın akışı alınamıyor.";
     }
 }
 
@@ -59,8 +69,9 @@ function calculateTimes(data) {
 
 // --- ANA DÖNGÜ VE KONTROLLER ---
 function checkBroadcastLoop() {
+    if (!AppState.isStarted) return; // TV açılmadıysa bekle
+
     const now = new Date();
-    
     updateClock(now);
     
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), AppConfig.startHour, AppConfig.startMinute, 0);
@@ -132,81 +143,101 @@ function handleFallbackState(now) {
     showScreen('fallbackScreen');
 }
 
-// --- VİDEO OYNATICI (PLAYER) ---
+// --- VİDEO OYNATICI (SABİT ELEMENTLERLE YENİ MANTIK) ---
 function playVideo(video, offsetSeconds) {
-    showScreen('videoWrapper');
-    const wrapper = document.getElementById('videoWrapper');
-    wrapper.innerHTML = ''; // Önceki oynatıcıyı temizle
+    showScreen('videoWrapper'); // Ekranı aktifleştir
+    
+    // Oynatıcıları yakala
+    const ytContainer = document.getElementById('ytContainer');
+    const nativePlayer = document.getElementById('nativePlayer');
+    const iframePlayer = document.getElementById('iframePlayer');
 
-    let playerElement;
+    // 1. Önce hepsini gizle ve sustur
+    ytContainer.style.display = 'none';
+    ytContainer.innerHTML = ''; 
+    
+    nativePlayer.style.display = 'none';
+    nativePlayer.pause();
+    nativePlayer.removeAttribute('src'); 
+    
+    iframePlayer.style.display = 'none';
+    iframePlayer.removeAttribute('src'); 
+    
+    if (hlsInstance) {
+        hlsInstance.destroy(); 
+        hlsInstance = null;
+    }
 
+    // 2. Sadece gerekeni göster ve kaynağı yükle
     switch (video.type) {
         case 'youtube':
-            playerElement = document.createElement('iframe');
-            playerElement.src = `https://www.youtube.com/embed/${video.url}?autoplay=1&start=${offsetSeconds}&controls=1&rel=0&enablejsapi=1&origin=${window.location.origin}`;
-            playerElement.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen";
+            ytContainer.style.display = 'block';
+            const ytIframe = document.createElement('iframe');
+            ytIframe.src = `https://www.youtube.com/embed/${video.url}?autoplay=1&start=${offsetSeconds}&controls=1&rel=0&enablejsapi=1&origin=${window.location.origin}`;
+            ytIframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen";
+            ytIframe.style.width = "100%";
+            ytIframe.style.height = "100%";
+            ytIframe.frameBorder = "0";
+            ytContainer.appendChild(ytIframe);
             break;
 
         case 'mp4':
-            playerElement = document.createElement('video');
-            playerElement.src = `${video.url}#t=${offsetSeconds}`;
-            playerElement.autoplay = true;
-            playerElement.controls = true;
-            playerElement.onerror = () => handleFallbackState(new Date());
+            nativePlayer.style.display = 'block';
+            nativePlayer.src = `${video.url}#t=${offsetSeconds}`;
+            nativePlayer.currentTime = offsetSeconds;
+            nativePlayer.play().catch(e => console.warn("MP4 Oynatılamadı:", e));
+            nativePlayer.onerror = () => handleFallbackState(new Date());
             break;
 
         case 'm3u8':
-            playerElement = document.createElement('video');
-            playerElement.autoplay = true;
-            playerElement.controls = true;
+            nativePlayer.style.display = 'block';
             
             if (typeof Hls !== 'undefined' && Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(video.url);
-                hls.attachMedia(playerElement);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    playerElement.currentTime = offsetSeconds;
-                    playerElement.play().catch(e => console.warn("Otomatik oynatma engellendi", e));
+                hlsInstance = new Hls();
+                hlsInstance.loadSource(video.url);
+                hlsInstance.attachMedia(nativePlayer);
+                hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+                    nativePlayer.currentTime = offsetSeconds;
+                    nativePlayer.play().catch(e => console.warn("HLS Oynatılamadı:", e));
                 });
-            } else if (playerElement.canPlayType('application/vnd.apple.mpegurl')) {
-                playerElement.src = video.url;
-                playerElement.addEventListener('loadedmetadata', () => {
-                    playerElement.currentTime = offsetSeconds;
-                    playerElement.play();
+            } else if (nativePlayer.canPlayType('application/vnd.apple.mpegurl')) {
+                nativePlayer.src = video.url;
+                nativePlayer.addEventListener('loadedmetadata', () => {
+                    nativePlayer.currentTime = offsetSeconds;
+                    nativePlayer.play().catch(e => console.warn("Native HLS Oynatılamadı:", e));
                 });
             }
             break;
 
         case 'iframe':
         default:
-            playerElement = document.createElement('iframe');
-            playerElement.src = video.url;
-            playerElement.allow = "autoplay; fullscreen";
+            iframePlayer.style.display = 'block';
+            iframePlayer.src = video.url;
             break;
-    }
-
-    if (playerElement) {
-        playerElement.style.width = "100%";
-        playerElement.style.height = "100%";
-        playerElement.frameBorder = "0";
-        wrapper.appendChild(playerElement);
     }
 }
 
 // --- UI KONTROLLERİ ---
 function showScreen(screenId) {
-    const screens = ['videoWrapper', 'fallbackScreen', 'offlineScreen'];
+    const screens = ['startScreen', 'videoWrapper', 'fallbackScreen', 'offlineScreen'];
     
     screens.forEach(id => {
         const el = document.getElementById(id);
+        if (!el) return;
+        
         if (id === screenId) {
             el.classList.remove('hidden');
         } else {
             el.classList.add('hidden');
-            // Ekranda video yoksa arkaplan belleğini temizle
-            if (id === 'videoWrapper') {
-                el.innerHTML = ''; 
-                if (screenId !== 'videoWrapper') AppState.currentVideoId = null;
+            
+            // Eğer video ekranından çıkıyorsak (Yayın bitişi, mola vb.) arka plandaki sesi kes
+            if (id === 'videoWrapper' && screenId !== 'videoWrapper') {
+                AppState.currentVideoId = null;
+                document.getElementById('ytContainer').innerHTML = '';
+                const np = document.getElementById('nativePlayer');
+                np.pause();
+                np.removeAttribute('src');
+                document.getElementById('iframePlayer').removeAttribute('src');
             }
         }
     });
