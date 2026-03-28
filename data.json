@@ -1,5 +1,14 @@
 [
+
   {
+    "id": 1,
+    "title": "Bluey 1. Sezon ",
+    "description": "Bluey, annesi, babası ve küçük kız kardeşi Bingo ile birlikte yaşayan sevimli ve enerjik bir Mavi Heeler yavru köpeğidir. Sınırsız enerjisini ve hayal gücünü keşfetmek, gülmek ve tüm arkadaşları ve ailesiyle oynamak için kullanıyor",
+    "type": "youtube",
+    "url": "7eoDtneR3Os",
+    "durationSeconds": 2313 
+  },
+    {
     "id": 1,
     "title": "Üç Kağıtçı-Kemal Sunal ",
     "description": "Üç Kağıtçı filminin oyuncuları, Kemal Sunal , Ülkü Özen,  Ali Şen, Turgut Özatay, Nizam Ergüden, Reha Yurdakul, Hakkı Kıvanç, Arap Celal, Zeki Sezer, Muhteşem Durukan, Zehra Uçar, Renan Fosforoğlu, Yadigar Ejder, Zeki Alpan, Haydar Karaer, Ahmet Turgutlu, Ayten Koçak , İsmail Cavcı.",
@@ -8,7 +17,7 @@
     "durationSeconds": 4887 
   },
     {
-    "id": 1,
+    "id": 2,
     "title": "Sakar Şakir-Kemal Sunal ",
     "description": "Sakar Şakir,  Kemal Sunal, Ali Şen, Adile Naşit'in başrollerini paylaştığı 1977 yapımı bir Türk filmidir",
     "type": "youtube",
@@ -16,3 +25,4 @@
     "durationSeconds": 4897 
   }
 ]
+
