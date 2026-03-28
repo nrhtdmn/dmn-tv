@@ -1,5 +1,13 @@
 [
   {
+    "id": 8,
+    "title": "Sibnet Video",
+    "description": "Sibnet üzerinden eklenen dış kaynaklı video.",
+    "type": "iframe",
+    "url": "https://video.sibnet.ru/shell.php?videoid=5744312",
+    "durationSeconds": 60
+  },
+  {
     "id": 1,
     "title": "Sabah Jimnastiği ve Dans",
     "description": "Güne enerjik başlamak için harika bir dans videosu!",
@@ -24,7 +32,6 @@
     "durationSeconds": 30
   },
   {
-
     "id": 4,
     "title": "EBA Video",
     "description": "EBA üzerinden gelen m3u8 ders videosu.",
@@ -56,5 +63,4 @@
     "url": "9bZkp7q19f0",
     "durationSeconds": 30
   }
-
 ]
