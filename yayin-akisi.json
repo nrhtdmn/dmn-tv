@@ -1,8 +1,15 @@
 {
-  "gunlukBaslangic": "06:05",
+  "gunlukBaslangic": "06:14",
   "gunlukBitis": "23:30",
   "videolar": [
-
+    {
+      "id": 2,
+      "baslik": "Tom ve Jerry (YouTube)",
+      "aciklama": "YouTube üzerinden çekilen video.",
+      "tur": "youtube",
+      "url": "t0Q2otsqC4I", 
+      "sureSaniye": 3600
+    },
     {
       "id": 1,
       "baslik": "Ormanın Kahramanları (MP4 Test)",
@@ -11,5 +18,6 @@
       "url": "https://www.w3schools.com/html/mov_bbb.mp4",
       "sureSaniye": 600
     }
+    
   ]
 }
