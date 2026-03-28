@@ -3,7 +3,7 @@
 // ============================================================
 
 const AppConfig = {
-    startHour:    22,
+    startHour:    06,
     startMinute:  30,
     endHour:      23,
     endMinute:    30,
