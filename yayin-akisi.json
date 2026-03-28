@@ -1,13 +1,13 @@
 {
-  "gunlukBaslangic": "16:17",
+  "gunlukBaslangic": "16:30",
   "gunlukBitis": "23:30",
   "videolar": [
     {
       "id": 2,
-      "baslik": "Tom ve Jerry (YouTube)",
-      "aciklama": "Yeni YouTube üzerinden çekilen video.",
+      "baslik": "Sadece Kod Yazarak Hayatta Kalamazsın...",
+      "aciklama": "TRT Çocuk resmi kanalından çekilen video.",
       "tur": "youtube",
-      "url": "aqz-KE-bpKQ", 
+      "url": "TCjzyhsG28Q", 
       "sureSaniye": 3600
     },
     {
@@ -18,6 +18,5 @@
       "url": "https://www.w3schools.com/html/mov_bbb.mp4",
       "sureSaniye": 600
     }
-    
   ]
 }
