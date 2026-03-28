@@ -1,22 +1,23 @@
+
 {
-  "gunlukBaslangic": "16:38",
+  "gunlukBaslangic": "16:40",
   "gunlukBitis": "23:30",
   "videolar": [
     {
-      "id": 2,
-      "baslik": "Miraculous Ladybug | Adventures of Miraculous Ladybug & Cat Noir Official Trailer | Nick",
-      "aciklama": "TRT Çocuk resmi kanalından çekilen video.",
-      "tur": "youtube",
-      "url": "04mqq9T6y_c", 
-      "sureSaniye": 3600
+      "id": 1,
+      "baslik": "Mucize Uğur Böceği (Google Drive)",
+      "aciklama": "Dış kaynaktan çekilen bölüm.",
+      "tur": "iframe",
+      "url": "https://drive.google.com/file/d/18eq8NISrCTB9vaVUkDbN8QQIS7UYukYN/preview",
+      "sureSaniye": 9999
     },
     {
-      "id": 1,
-      "baslik": "Ormanın Kahramanları (MP4 Test)",
-      "aciklama": "Sistemden yüklenen normal video.",
-      "tur": "mp4",
-      "url": "https://www.w3schools.com/html/mov_bbb.mp4",
-      "sureSaniye": 600
+      "id": 2,
+      "baslik": "Rafadan Tayfa (YouTube)",
+      "aciklama": "YouTube üzerinden oynatılıyor.",
+      "tur": "youtube",
+      "url": "Bnt6P3y7H1g",
+      "sureSaniye": 3600
     }
   ]
 }
