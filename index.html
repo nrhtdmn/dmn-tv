@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DmnTV - Çocuk Kanalı</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="image_1.png" alt="DmnTV Logo" class="logo">
+        </div>
+        <div id="liveClock" class="clock-display">--:--:--</div>
+        
+        <button id="fullscreenBtn" class="btn">📺 Tam Ekran</button>
+    </header>
+
+    <main class="tv-container">
+        <section class="player-section" id="playerContainer">
+            
+            <img src="image_1.png" alt="DmnTV" class="channel-logo-overlay">
+            
+            <div id="upNextBanner" class="up-next-banner">
+                <img src="image_1.png" alt="Logo" class="up-next-logo">
+                <div class="up-next-info">
+                    <span>Bir Sonraki:</span>
+                    <h4 id="upNextTitle">Yükleniyor...</h4>
+                </div>
+            </div>
+            
+            <div id="videoWrapper">
+            </div>
+            
+            <div id="fallbackScreen" class="hidden">
+                <h2>Oops! Yayınlar Bitti İyi Geceler Çocuklar 🔌</h2>
+                <p>Bir sonraki yayına kadar İyi Uykular! 🎮🧩</p>
+                <p>Sıradaki yayın: <span id="nextShowTime">--:--</span></p>
+            </div>
+            
+            <div id="offlineScreen" class="hidden">
+                <h2>Bugünlük bu kadar! 🌙</h2>
+                <p>Kanalımız saat 06:30'da tekrar yayında olacak. İyi uykular!</p>
+            </div>
+            
+        </section>
+
+        <aside class="info-section">
+            <div class="current-info">
+                <h3>Şu An Oynatılan:</h3>
+                <h2 id="currentTitle">Yükleniyor...</h2>
+                <p id="currentDesc">Lütfen bekleyin...</p>
+            </div>
+            
+            <div class="schedule-container">
+                <h3>📅 Yayın Akışı</h3>
+                <ul id="scheduleList"></ul>
+            </div>
+        </aside>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="app.js"></script>
+</body>
+</html>

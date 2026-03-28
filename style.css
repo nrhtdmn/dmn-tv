@@ -1,0 +1,263 @@
+:root {
+    --primary: #00a8ff;
+    --secondary: #ff3838;
+    --yellow: #fbc531;
+    --dark: #2f3640;
+    --light: #f5f6fa;
+    --radius: 15px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Çocuksu bir font */
+}
+
+body {
+    background-color: var(--light);
+    color: var(--dark);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.logo {
+    height: 60px;
+    object-fit: contain;
+}
+
+.btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+.tv-container {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    gap: 20px;
+    overflow: hidden;
+}
+
+/* --- 1. OYNATICI ALANI AYARI (Videonun Bulunduğu Kutu) --- */
+.player-section {
+    flex: 2;
+    background-color: black;
+    border-radius: var(--radius);
+    position: relative; /* İçindeki elemanların absolute pozisyonlanabilmesi için şart */
+    overflow: hidden; /* Sağda bekleyen afişin görünmemesi için şart */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    display: block; /* Flex özelliğini kaldırıp block yaparak absolute pozisyonlamayı garanti alıyoruz */
+}
+
+/* --- 2. VİDEO KUTUSU (Tam ekranı kaplasın, afişten etkilenmesin) --- */
+#videoWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10; /* En alttaki katman */
+}
+
+#videoWrapper iframe, #videoWrapper video {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    object-fit: contain; /* Videonun en-boy oranını bozmadan ekrana sığdırır */
+}
+
+.info-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.current-info {
+    background-color: var(--yellow);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.current-info h3 { color: var(--secondary); font-size: 1.2rem; margin-bottom: 5px; }
+.current-info h2 { font-size: 1.8rem; margin-bottom: 10px; }
+
+.schedule-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: var(--radius);
+    flex: 1;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+
+.schedule-container h3 {
+    margin-bottom: 15px;
+    color: var(--primary);
+}
+
+#scheduleList {
+    list-style: none;
+}
+
+#scheduleList li {
+    padding: 12px;
+    border-bottom: 2px dashed #dcdde1;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+#scheduleList li.active {
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+}
+
+/* --- YAYIN DIŞI, HATA VE BEKLEME EKRANLARI (Videonun Üstünde) --- */
+#fallbackScreen, #offlineScreen {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--dark)); /* Şık bir arka plan */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    z-index: 30; /* Videonun (10) ve diğer her şeyin KESİNLİKLE üstünde durmasını sağlar */
+}
+
+#fallbackScreen h2, #offlineScreen h2 { font-size: 2.5rem; margin-bottom: 15px; }
+#fallbackScreen p, #offlineScreen p { font-size: 1.5rem; }
+.hidden { display: none !important; }
+
+/* Mobil Uyumluluk */
+@media (max-width: 768px) {
+    .tv-container {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+    .player-section {
+        min-height: 30vh; /* Mobilde video alanının çok küçülmesini engeller */
+    }
+}
+/* Canlı Saat Stili */
+.clock-display {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary);
+    background-color: var(--light);
+    padding: 5px 20px;
+    border-radius: 50px;
+    border: 3px solid var(--yellow);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    letter-spacing: 2px;
+}
+
+/* Tam ekrana geçildiğinde video alanının arka planını tam siyah yapalım */
+#playerContainer:fullscreen {
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+}
+/* TV Kanal Logosu Overlay (Filigran) */
+.channel-logo-overlay {
+    position: absolute;
+    top: 20px;
+    left: 20px; /* Sağ üstte istersen right: 20px; yapabilirsin */
+    width: 80px; /* Logonun ekrandaki büyüklüğü */
+    z-index: 50; /* Videonun ve bekleme ekranlarının üstünde durmasını sağlar */
+    pointer-events: none; /* KRİTİK: Logonun altındaki videoya tıklanabilmesini sağlar */
+    opacity: 0.85; /* Gerçek TV logosu gibi hafif şeffaf (1 tam görünür, 0 görünmez) */
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5)); /* Logoya hafif gölge verir */
+}
+
+/* Tam ekran moduna geçildiğinde logoyu biraz daha büyütelim */
+#playerContainer:fullscreen .channel-logo-overlay {
+    width: 130px;
+    top: 30px;
+    left: 30px;
+}
+
+/* --- 3. SONRAKİ PROGRAM AFİŞİ (Videonun üstünde uçmalı) --- */
+.up-next-banner {
+    position: absolute;
+    bottom: 40px;
+    right: -350px; /* Başlangıçta ekranın sağında, tamamen gizli */
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px 0 0 50px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: -5px 5px 15px rgba(0,0,0,0.4);
+    transition: right 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Yaylanarak giriş efekti */
+    z-index: 60; /* Videonun (10) ve diğer her şeyin üstünde */
+    width: 280px;
+}
+
+/* JS bu sınıfı eklediğinde afiş ekrana kayar */
+.up-next-banner.show {
+    right: 0; 
+}
+
+.up-next-logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: white;
+    object-fit: contain;
+    padding: 3px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.up-next-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.up-next-info span {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.up-next-info h4 {
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Yazı uzunsa sonuna ... koyar */
+    max-width: 170px;
+    margin: 0;
+}
