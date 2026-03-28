@@ -1,0 +1,66 @@
+[
+  {
+    "id": 8,
+    "title": "Sibnet Video",
+    "description": "Sibnet üzerinden eklenen dış kaynaklı video.",
+    "type": "iframe",
+    "url": "https://video.sibnet.ru/shell.php?videoid=5744312",
+    "durationSeconds": 10
+  },
+  {
+    "id": 1,
+    "title": "Μαθηματικά ",
+    "description": "Καλώς ήρθατε στο μάθημα των Μαθηματικών για τις τάξεις Β', Γ΄, Δ΄, Ε΄ και ΣΤ' Δημοτικού με τον πανεπιστημιακό Γιάννη Καραγιαννάκη. Το μάθημα προβλήθηκε στην ΕΡΤ2 στις 2 Απριλίου 2020.Μέρος από τις στρατηγικές και ιδέες που παρουσιάζονται σε αυτό το βίντεο εμπνευστήκαν από τη μέθοδο διδασκαλίας RekenTrapperS που έχει αναπτύξει η Anny Cooreman στο σχολείο Eureka Leuven στο Βέλγιο. Ο Δρ. Γιάννης Καραγιαννάκης έχει εργαστεί για σειρά ετών ως επιστημονικός συνεργάτης του Eureka Leuven και έχει μοιραστεί με την Anny Cooreman καλές πρακτικές διδασκαλίας των μαθηματικών",
+    "type": "youtube",
+    "url": "YO4V0YzzF4g", 
+    "durationSeconds": 30
+  },
+  {
+    "id": 2,
+    "title": "Sevimli Hayvanlar Belgeseli",
+    "description": "Doğadaki dostlarımızı yakından tanıyalım.",
+    "type": "mp4",
+    "url": "https://www.w3schools.com/html/mov_bbb.mp4",
+    "durationSeconds": 30
+  },
+  {
+    "id": 3,
+    "title": "Çizgi Film Kuşağı: Uzay Macerası",
+    "description": "Kahramanlarımız uzayda yeni gezegenler keşfediyor.",
+    "type": "youtube",
+    "url": "jNQXAC9IVRw",
+    "durationSeconds": 30
+  },
+  {
+    "id": 4,
+    "title": "EBA Video",
+    "description": "EBA üzerinden gelen m3u8 ders videosu.",
+    "type": "m3u8",
+    "url": "https://cdnvideo.eba.gov.tr/v/9fa9/3cbc/fa60/9018/473f/d5b5/de1a/a0c0/90df/fb7a/playlist.m3u8",
+    "durationSeconds": 30
+  },
+  {
+    "id": 5,
+    "title": "Mucize Uğur Böceği",
+    "description": "Dış kaynaktan çekilen bölüm.",
+    "type": "iframe",
+    "url": "https://drive.google.com/file/d/18eq8NISrCTB9vaVUkDbN8QQIS7UYukYN/preview",
+    "durationSeconds": 60
+  },
+  {
+    "id": 6,
+    "title": "Doğa Belgeseli HD",
+    "description": "m3u8 test yayını.",
+    "type": "m3u8",
+    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+    "durationSeconds": 30
+  },
+  {
+    "id": 7,
+    "title": "Çizgi Film: Kayıp Hazine",
+    "description": "Kahramanlarımız kayıp bir hazineyi bulmak için maceraya atılıyor.",
+    "type": "youtube",
+    "url": "9bZkp7q19f0",
+    "durationSeconds": 30
+  }
+]

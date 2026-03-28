@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DmnTV - Çocuk Kanalı</title>
     <link rel="icon" href="image_1.png" type="image/png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -28,7 +33,6 @@
                 </div>
             </div>
 
-            <!-- Video alanı -->
             <div id="videoWrapper" class="player__video hidden">
                 <div id="ytContainer" style="width:100%;height:100%;display:none;"></div>
                 <video id="nativePlayer" style="width:100%;height:100%;display:none;" autoplay playsinline controls></video>
@@ -43,7 +47,6 @@
                 </div>
             </div>
 
-            <!-- Yayın dışı -->
             <div id="offlineScreen" class="player__screen hidden">
                 <div class="screen-emoji">🌙</div>
                 <h2>Bugünlük bu kadar!</h2>
@@ -51,14 +54,12 @@
                 <p>Sıradaki yayın: <strong><span id="offlineNextTime">--:--</span></strong></p>
             </div>
 
-            <!-- Program arası -->
             <div id="fallbackScreen" class="player__screen hidden">
                 <div class="screen-emoji">⏳</div>
                 <h2>Çok yakında...</h2>
                 <p>Sıradaki yayın: <strong><span id="nextShowTime">--:--</span></strong></p>
             </div>
 
-            <!-- Yükleniyor -->
             <div id="loadingScreen" class="player__screen">
                 <div class="screen-emoji spin">📡</div>
                 <h2>Yükleniyor...</h2>

@@ -3,8 +3,8 @@
 // ============================================================
 
 const AppConfig = {
-    startHour:    20,
-    startMinute:  37,
+    startHour:    21,
+    startMinute:  0,
     endHour:      23,
     endMinute:    30,
     dataUrl:      'data.json',
@@ -77,25 +77,10 @@ function tick() {
 
     let current = AppState.scheduleData.find(v => now >= v.startTime && now < v.endTime);
 
-    // if (!current && AppConfig.loopSchedule) {
-    //     const last = AppState.scheduleData[AppState.scheduleData.length - 1];
-    //     if (last && now >= last.endTime) {
-    //         reloop(last.endTime);
-    //         current = AppState.scheduleData.find(v => now >= v.startTime && now < v.endTime);
-    //     }
-    // }
-
     if (current) {
         playIfChanged(current, now);
         updateBanner(current, now);
-        updateProgressBar(current, now); // YENİ EKLENEN SATIR
-    } else {
-        showFallback(now);
-    }
-
-    if (current) {
-        playIfChanged(current, now);
-        updateBanner(current, now);
+        updateProgressBar(current, now);
     } else {
         showFallback(now);
     }
@@ -140,7 +125,7 @@ function playVideo(video, offset) {
                       '?autoplay=1&start=' + offset + '&controls=1&rel=0&modestbranding=1&playsinline=1';
             ifr.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen';
             ifr.allowFullscreen = true;
-            ifr.style.cssText = 'width:100%;height:100%;border:none;';
+            ifr.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;';
             ytBox.appendChild(ifr);
             break;
         }
@@ -174,6 +159,25 @@ function playVideo(video, offset) {
                     native.play().catch(e => console.warn(e));
                 });
             }
+            break;
+        }
+        case 'dailymotion': {
+            native.style.display = 'block';
+            fetch('https://api.dailymotion.com/video/' + video.url + '?fields=stream_h264_hd_url,stream_h264_url,stream_h264_ld_url')
+                .then(r => r.json())
+                .then(d => {
+                    const src = d.stream_h264_hd_url || d.stream_h264_url || d.stream_h264_ld_url;
+                    if (!src) { showFallback(new Date()); return; }
+                    native.src = src;
+                    native.load();
+                    native.addEventListener('loadedmetadata', function h() {
+                        native.removeEventListener('loadedmetadata', h);
+                        native.currentTime = offset;
+                        native.play().catch(() => { native.muted = true; native.play(); });
+                    });
+                })
+                .catch(() => showFallback(new Date()));
+            native.onerror = () => showFallback(new Date());
             break;
         }
         case 'iframe':
@@ -280,22 +284,19 @@ function fmt(d) {
     return d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
 }
 
-// --- İLERLEME ÇUBUĞU (YENİ) ---
+// --- İLERLEME ÇUBUĞU ---
 function updateProgressBar(current, now) {
     const totalDuration = current.endTime - current.startTime;
     const elapsed = now - current.startTime;
     const remaining = current.endTime - now;
 
-    // Yüzdelik dilimi hesapla (0 ile 100 arasında sınırla)
     const percent = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
     document.getElementById('progressBar').style.width = percent + '%';
 
-    // Süreleri metin olarak yazdır
     document.getElementById('progressElapsed').textContent = formatDuration(Math.floor(elapsed / 1000));
-    document.getElementById('progressRemaining').textContent = "-" + formatDuration(Math.floor(remaining / 1000));
+    document.getElementById('progressRemaining').textContent = '-' + formatDuration(Math.floor(remaining / 1000));
 }
 
-// Saniyeyi mm:ss formatına çeviren yardımcı fonksiyon
 function formatDuration(seconds) {
     const m = Math.floor(seconds / 60).toString().padStart(2, '0');
     const s = (seconds % 60).toString().padStart(2, '0');
