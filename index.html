@@ -8,139 +8,77 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- UYKU ZAMANLAYICI MODALİ -->
-    <div id="sleepModal" class="modal-overlay hidden">
-        <div class="modal-box">
-            <h3>⏰ Uyku Zamanlayıcı</h3>
-            <p>TV kaç dakika sonra kapansın?</p>
-            <div class="sleep-options">
-                <button class="btn btn--sleep" data-minutes="15">15 dk</button>
-                <button class="btn btn--sleep" data-minutes="30">30 dk</button>
-                <button class="btn btn--sleep" data-minutes="45">45 dk</button>
-                <button class="btn btn--sleep" data-minutes="60">60 dk</button>
-            </div>
-            <div id="sleepStatus" class="sleep-status hidden"></div>
-            <button class="btn btn--cancel" id="closeSleepModal">İptal</button>
-        </div>
-    </div>
-
-    <!-- EBEVEYN KİLİDİ MODALİ -->
-    <div id="parentModal" class="modal-overlay hidden">
-        <div class="modal-box">
-            <h3>🔒 Ebeveyn Kilidi</h3>
-            <p id="parentModalDesc">TV'yi kapatmak için PIN giriniz.</p>
-            <div class="pin-display" id="pinDisplay">● ● ● ●</div>
-            <div class="pin-pad">
-                <button class="pin-btn" data-digit="1">1</button>
-                <button class="pin-btn" data-digit="2">2</button>
-                <button class="pin-btn" data-digit="3">3</button>
-                <button class="pin-btn" data-digit="4">4</button>
-                <button class="pin-btn" data-digit="5">5</button>
-                <button class="pin-btn" data-digit="6">6</button>
-                <button class="pin-btn" data-digit="7">7</button>
-                <button class="pin-btn" data-digit="8">8</button>
-                <button class="pin-btn" data-digit="9">9</button>
-                <button class="pin-btn pin-btn--clear" id="pinClear">⌫</button>
-                <button class="pin-btn" data-digit="0">0</button>
-                <button class="pin-btn pin-btn--ok" id="pinOk">✓</button>
-            </div>
-            <p id="pinError" class="pin-error hidden">Yanlış PIN! Tekrar deneyin.</p>
-            <button class="btn btn--cancel" id="closeParentModal">İptal</button>
-        </div>
-    </div>
-
     <header class="header">
         <div class="header__logo-container">
             <img src="image_1.png" alt="DmnTV Logo" class="header__logo">
         </div>
-        <div id="liveClock" class="header__clock clock-display">--:--:--</div>
-        <div class="header__controls">
-            <button id="muteBtn" class="btn btn--icon" title="Ses Aç/Kapat">🔊</button>
-            <button id="sleepBtn" class="btn btn--icon" title="Uyku Zamanlayıcı">😴</button>
-            <button id="fullscreenBtn" class="btn btn--primary">📺 Tam Ekran</button>
-            <button id="stopTvBtn" class="btn btn--danger hidden">⏹ Kapat</button>
-        </div>
+        <div id="liveClock" class="header__clock">--:--:--</div>
+        <button id="fullscreenBtn" class="btn">📺 Tam Ekran</button>
     </header>
 
-    <main class="main main--tv-container">
-        <section class="player-section" id="playerContainer">
-            <img src="image_1.png" alt="DmnTV" class="player-section__logo-overlay">
-            
-            <!-- İLERLEME ÇUBUĞU -->
-            <div id="progressBar" class="progress-bar hidden">
-                <div id="progressFill" class="progress-bar__fill"></div>
-                <div id="progressLabel" class="progress-bar__label">--:-- / --:--</div>
-            </div>
-            
+    <main class="main">
+        <section class="player" id="playerContainer">
+            <img src="image_1.png" alt="DmnTV" class="player__watermark">
+
             <div id="upNextBanner" class="up-next-banner">
                 <img src="image_1.png" alt="Logo" class="up-next-banner__logo">
                 <div class="up-next-banner__info">
-                    <span>Bir Sonraki:</span>
-                    <h4 id="upNextTitle">Yükleniyor...</h4>
+                    <span>Sıradaki:</span>
+                    <h4 id="upNextTitle"></h4>
                 </div>
-            </div>
-            
-            <!-- BAŞLANGIÇ EKRANI -->
-            <div id="startScreen" class="player-section__screen screen--start">
-                <div class="start-animation">📺</div>
-                <h2>DmnTV'ye Hoş Geldin!</h2>
-                <p>Harika çizgi filmler ve eğlenceli videolar seni bekliyor!</p>
-                <button id="startTvBtn" class="btn btn--big">🔴 Televizyonu Aç</button>
             </div>
 
-            <!-- VİDEO ALANI -->
-            <div id="videoWrapper" class="player-section__video-wrapper hidden">
+            <!-- Video alanı -->
+            <div id="videoWrapper" class="player__video hidden">
                 <div id="ytContainer" style="width:100%;height:100%;display:none;"></div>
-                <video id="nativePlayer" style="width:100%;height:100%;display:none;" autoplay playsinline controls muted></video>
-                
-                <!-- iframe için overlay: tıklanınca başlar -->
-                <div id="iframeOverlay" class="iframe-overlay hidden">
-                    <button id="iframePlayBtn" class="iframe-play-btn">▶ Videoyu Başlat</button>
-                </div>
+                <video id="nativePlayer" style="width:100%;height:100%;display:none;" autoplay playsinline controls></video>
                 <iframe id="iframePlayer" style="width:100%;height:100%;border:none;display:none;" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
+                
+                <div id="progressBarContainer" class="progress-container">
+                    <div id="progressBar" class="progress-bar"></div>
+                    <div class="progress-text">
+                        <span id="progressElapsed">00:00</span>
+                        <span id="progressRemaining">-00:00</span>
+                    </div>
+                </div>
             </div>
-            
-            <!-- MOLA EKRANI -->
-            <div id="fallbackScreen" class="player-section__screen screen--fallback hidden">
-                <div class="screen-emoji">🌟</div>
-                <h2>Harika videolar bitti!</h2>
-                <p>Biraz dinlen, çok yakında devam ediyoruz! 🎈</p>
-                <p>Sıradaki yayın: <strong><span id="nextShowTime">--:--</span></strong></p>
-            </div>
-            
-            <!-- OFFLİNE EKRANI -->
-            <div id="offlineScreen" class="player-section__screen screen--offline hidden">
-                <div class="stars-animation">🌙⭐🌙</div>
+
+            <!-- Yayın dışı -->
+            <div id="offlineScreen" class="player__screen hidden">
+                <div class="screen-emoji">🌙</div>
                 <h2>Bugünlük bu kadar!</h2>
-                <p>Yarın tekrar buluşuruz! İyi uykular! 😴</p>
+                <p>İyi uykular! Yarın tekrar buluşuruz.</p>
                 <p>Sıradaki yayın: <strong><span id="offlineNextTime">--:--</span></strong></p>
             </div>
 
-            <!-- TV KAPALI EKRANI (ebeveyn kilidi ile kapatıldığında) -->
-            <div id="stoppedScreen" class="player-section__screen screen--stopped hidden">
-                <div class="screen-emoji">🔒</div>
-                <h2>TV Kapatıldı</h2>
-                <p>Ebeveyn tarafından kapatıldı.</p>
-                <button id="reopenTvBtn" class="btn btn--big" style="margin-top:20px;">🔴 Tekrar Aç</button>
+            <!-- Program arası -->
+            <div id="fallbackScreen" class="player__screen hidden">
+                <div class="screen-emoji">⏳</div>
+                <h2>Çok yakında...</h2>
+                <p>Sıradaki yayın: <strong><span id="nextShowTime">--:--</span></strong></p>
+            </div>
+
+            <!-- Yükleniyor -->
+            <div id="loadingScreen" class="player__screen">
+                <div class="screen-emoji spin">📡</div>
+                <h2>Yükleniyor...</h2>
             </div>
         </section>
 
-        <aside class="info-section">
-            <article class="info-section__current">
-                <h3>📺 Şu An Oynatılan:</h3>
-                <h2 id="currentTitle">TV Kapalı</h2>
-                <p id="currentDesc">Yayını başlatmak için butona tıklayın.</p>
-                <div id="currentType" class="type-badge"></div>
+        <aside class="sidebar">
+            <article class="now-playing">
+                <h3>▶ Şu An</h3>
+                <h2 id="currentTitle">—</h2>
+                <p id="currentDesc"></p>
             </article>
-            
-            <article class="info-section__schedule">
+
+            <article class="schedule-box">
                 <h3>📅 Yayın Akışı</h3>
                 <ul id="scheduleList" class="schedule-list"></ul>
             </article>
         </aside>
     </main>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="app.js"></script>
 </body>
