@@ -4,7 +4,7 @@
 
 const AppConfig = {
     startHour:    20,
-    startMinute:  32,
+    startMinute:  37,
     endHour:      23,
     endMinute:    30,
     dataUrl:      'data.json',
