@@ -1,5 +1,6 @@
 const htmlPlayer = document.getElementById('tv-player');
 const ytPlayerContainer = document.getElementById('yt-player');
+const iframePlayer = document.getElementById('iframe-player'); // YENİ
 const errorScreen = document.getElementById('error-screen');
 const liveBadge = document.getElementById('live-badge');
 const goLiveBtn = document.getElementById('go-live-btn');
@@ -35,7 +36,6 @@ window.onYouTubeIframeAPIReady = function() {
 }
 
 function onYtStateChange(event) {
-    // 2: Paused (Durduruldu)
     if (event.data === YT.PlayerState.PAUSED) {
         goLiveBtn.style.display = 'block';
         liveBadge.style.opacity = '0.5';
@@ -45,7 +45,6 @@ function onYtStateChange(event) {
 // --- SİSTEMİ BAŞLAT VE JSON ÇEK ---
 async function loadSchedule() {
     try {
-        // Cache sorununu çözmek için sonuna zaman damgası ekledik
         const response = await fetch('yayin-akisi.json?v=' + new Date().getTime());
         const data = await response.json();
         
@@ -96,18 +95,34 @@ function checkLiveStatus() {
 function playVideo(videoData) {
     hideError();
     
+    // YENİ: Hangi tür video oynuyorsa diğerlerini sustur ve gizle
     if (videoData.tur === 'youtube') {
         htmlPlayer.style.display = 'none';
         htmlPlayer.pause();
+        iframePlayer.style.display = 'none';
+        iframePlayer.src = ''; // Arka planda ses çalmasını engelle
         ytPlayerContainer.style.display = 'block';
         
         if (isYtReady) {
             ytPlayer.loadVideoById(videoData.url);
             syncToLiveTime();
         }
-    } else {
+    } else if (videoData.tur === 'iframe') {
+        htmlPlayer.style.display = 'none';
+        htmlPlayer.pause();
         ytPlayerContainer.style.display = 'none';
         if (isYtReady) ytPlayer.pauseVideo();
+        
+        iframePlayer.style.display = 'block';
+        iframePlayer.src = videoData.url;
+        
+        goLiveBtn.style.display = 'none';
+        liveBadge.style.opacity = '1';
+    } else { // mp4
+        ytPlayerContainer.style.display = 'none';
+        if (isYtReady) ytPlayer.pauseVideo();
+        iframePlayer.style.display = 'none';
+        iframePlayer.src = ''; 
         htmlPlayer.style.display = 'block';
         
         htmlPlayer.src = videoData.url;
@@ -119,6 +134,9 @@ function syncToLiveTime() {
     if (currentActiveVideoIndex === -1) return;
     
     const activeVideo = scheduleData[currentActiveVideoIndex];
+    // İframe'e dışarıdan müdahale edemeyiz, o yüzden senkronize etmeye çalışmıyoruz
+    if (activeVideo.tur === 'iframe') return; 
+
     const diffSeconds = (new Date() - activeVideo.startTime) / 1000;
     
     if (activeVideo.tur === 'youtube') {
@@ -137,10 +155,16 @@ function syncToLiveTime() {
 
 function checkSync() {
     if (currentActiveVideoIndex === -1) return;
-    
     const activeVideo = scheduleData[currentActiveVideoIndex];
-    const expectedTime = (new Date() - activeVideo.startTime) / 1000;
     
+    // İframe senkronizasyon dışı bırakıldı
+    if (activeVideo.tur === 'iframe') {
+        goLiveBtn.style.display = 'none';
+        liveBadge.style.opacity = '1';
+        return;
+    }
+    
+    const expectedTime = (new Date() - activeVideo.startTime) / 1000;
     let currentTime = 0;
     let isPaused = false;
 
@@ -162,7 +186,6 @@ function checkSync() {
     }
 }
 
-// MP4 Duraklatma Event'i
 htmlPlayer.addEventListener('pause', () => {
     goLiveBtn.style.display = 'block';
     liveBadge.style.opacity = '0.5';
@@ -173,8 +196,11 @@ goLiveBtn.addEventListener('click', syncToLiveTime);
 function showError(msg) {
     htmlPlayer.pause();
     if(isYtReady) ytPlayer.pauseVideo();
+    iframePlayer.src = '';
+    
     htmlPlayer.style.display = 'none';
     ytPlayerContainer.style.display = 'none';
+    iframePlayer.style.display = 'none';
     
     errorScreen.style.display = 'flex';
     liveBadge.style.display = 'none';
@@ -209,7 +235,7 @@ function renderScheduleUI() {
 }
 
 function formatTime(date) {
-    return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
+    return date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', hour12: false });
 }
 
 loadSchedule();
