@@ -1,0 +1,173 @@
+
+:root {
+    --primary-color: #ff6b6b;
+    --bg-color: #f0f4f8;
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --border-radius: 16px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Çocuk dostu font hissi */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.player-section {
+    flex: 3;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #000;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+#tv-player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.live-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: red;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    transition: opacity 0.3s;
+}
+
+.error-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #4ecdc4;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 20;
+    padding: 20px;
+}
+
+.error-screen h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.error-screen p {
+    font-size: 1.2rem;
+}
+
+.go-live-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: background 0.3s;
+}
+
+.go-live-btn:hover {
+    background-color: #ff4757;
+}
+
+.video-info {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.schedule-section {
+    flex: 1;
+    min-width: 250px;
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.schedule-list {
+    list-style: none;
+    margin-top: 15px;
+}
+
+.schedule-list li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+}
+
+.schedule-list li.active {
+    background-color: #fff4f4;
+    border-left: 4px solid var(--primary-color);
+    font-weight: bold;
+}
+
+.time-slot {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+/* TV ve Mobil Uyumluluk */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .player-section {
+        flex: none;
+        width: 100%;
+    }
+}

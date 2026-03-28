@@ -1,0 +1,14 @@
+{
+  "gunlukBaslangic": "17:54",
+  "gunlukBitis": "23:30",
+  "videolar": [
+    {
+      "id": 1,
+      "baslik": "Test Yayını",
+      "aciklama": "Sistemin çalıştığını test ediyoruz.",
+      "tur": "mp4",
+      "url": "https://www.w3schools.com/html/mov_bbb.mp4",
+      "sureSaniye": 36000
+    }
+  ]
+}
