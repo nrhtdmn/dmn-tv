@@ -1,14 +1,15 @@
 {
-  "gunlukBaslangic": "17:54",
+  "gunlukBaslangic": "06:05",
   "gunlukBitis": "23:30",
   "videolar": [
+
     {
       "id": 1,
-      "baslik": "Test Yayını",
-      "aciklama": "Sistemin çalıştığını test ediyoruz.",
+      "baslik": "Ormanın Kahramanları (MP4 Test)",
+      "aciklama": "Sistemden yüklenen normal video.",
       "tur": "mp4",
       "url": "https://www.w3schools.com/html/mov_bbb.mp4",
-      "sureSaniye": 36000
+      "sureSaniye": 600
     }
   ]
 }
